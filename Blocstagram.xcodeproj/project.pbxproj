@@ -26,6 +26,7 @@
 		0C0BFC59198A0D71009C8B24 /* BLCMedia.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C0BFC58198A0D71009C8B24 /* BLCMedia.m */; };
 		0C0BFC5C198A0E13009C8B24 /* BLCComment.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C0BFC5B198A0E13009C8B24 /* BLCComment.m */; };
 		0C0BFC5F198A0E78009C8B24 /* BLCDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C0BFC5E198A0E78009C8B24 /* BLCDataSource.m */; };
+		0C32D8FA198A81CF00EBFDD2 /* BLCMediaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C32D8F9198A81CF00EBFDD2 /* BLCMediaTableViewCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,8 @@
 		0C0BFC5B198A0E13009C8B24 /* BLCComment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCComment.m; sourceTree = "<group>"; };
 		0C0BFC5D198A0E78009C8B24 /* BLCDataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BLCDataSource.h; sourceTree = "<group>"; };
 		0C0BFC5E198A0E78009C8B24 /* BLCDataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BLCDataSource.m; sourceTree = "<group>"; };
+		0C32D8F8198A81CF00EBFDD2 /* BLCMediaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BLCMediaTableViewCell.h; path = ../BLCMediaTableViewCell.h; sourceTree = "<group>"; };
+		0C32D8F9198A81CF00EBFDD2 /* BLCMediaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BLCMediaTableViewCell.m; path = ../BLCMediaTableViewCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,21 +112,16 @@
 		0C0BFC1E1988C09F009C8B24 /* Blocstagram */ = {
 			isa = PBXGroup;
 			children = (
+				0C32D8FB198A81E000EBFDD2 /* Models */,
 				0C0BFC511988C2ED009C8B24 /* BLCImagesTableViewController.h */,
 				0C0BFC521988C2ED009C8B24 /* BLCImagesTableViewController.m */,
+				0C32D8F8198A81CF00EBFDD2 /* BLCMediaTableViewCell.h */,
+				0C32D8F9198A81CF00EBFDD2 /* BLCMediaTableViewCell.m */,
 				0C0BFC231988C09F009C8B24 /* AppDelegate.h */,
 				0C0BFC241988C09F009C8B24 /* AppDelegate.m */,
 				0C0BFC261988C09F009C8B24 /* Images.xcassets */,
 				0C0BFC3C1988C29D009C8B24 /* images */,
 				0C0BFC1F1988C09F009C8B24 /* Supporting Files */,
-				0C0BFC54198A0C61009C8B24 /* BLCUser.h */,
-				0C0BFC55198A0C61009C8B24 /* BLCUser.m */,
-				0C0BFC57198A0D71009C8B24 /* BLCMedia.h */,
-				0C0BFC58198A0D71009C8B24 /* BLCMedia.m */,
-				0C0BFC5A198A0E13009C8B24 /* BLCComment.h */,
-				0C0BFC5B198A0E13009C8B24 /* BLCComment.m */,
-				0C0BFC5D198A0E78009C8B24 /* BLCDataSource.h */,
-				0C0BFC5E198A0E78009C8B24 /* BLCDataSource.m */,
 			);
 			path = Blocstagram;
 			sourceTree = "<group>";
@@ -169,6 +167,21 @@
 				0C0BFC461988C2AE009C8B24 /* 10.png */,
 			);
 			name = images;
+			sourceTree = "<group>";
+		};
+		0C32D8FB198A81E000EBFDD2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0C0BFC54198A0C61009C8B24 /* BLCUser.h */,
+				0C0BFC55198A0C61009C8B24 /* BLCUser.m */,
+				0C0BFC57198A0D71009C8B24 /* BLCMedia.h */,
+				0C0BFC58198A0D71009C8B24 /* BLCMedia.m */,
+				0C0BFC5A198A0E13009C8B24 /* BLCComment.h */,
+				0C0BFC5B198A0E13009C8B24 /* BLCComment.m */,
+				0C0BFC5D198A0E78009C8B24 /* BLCDataSource.h */,
+				0C0BFC5E198A0E78009C8B24 /* BLCDataSource.m */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -284,6 +297,7 @@
 				0C0BFC531988C2ED009C8B24 /* BLCImagesTableViewController.m in Sources */,
 				0C0BFC59198A0D71009C8B24 /* BLCMedia.m in Sources */,
 				0C0BFC5C198A0E13009C8B24 /* BLCComment.m in Sources */,
+				0C32D8FA198A81CF00EBFDD2 /* BLCMediaTableViewCell.m in Sources */,
 				0C0BFC5F198A0E78009C8B24 /* BLCDataSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
