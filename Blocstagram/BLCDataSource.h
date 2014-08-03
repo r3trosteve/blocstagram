@@ -14,9 +14,12 @@
 
 @interface BLCDataSource : NSObject
 
++(NSString *) instagramClientID;
 
 +(instancetype) sharedInstance;
- @property (nonatomic, strong, readonly) NSMutableArray *mediaItems;
+
+@property (nonatomic, strong, readonly) NSString *accessToken;
+@property (nonatomic, strong, readonly) NSMutableArray *mediaItems;
 
 - (void) deleteMediaItem:(BLCMedia *)item;
 
