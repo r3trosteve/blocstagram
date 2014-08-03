@@ -48,6 +48,19 @@ static NSParagraphStyle *paragraphStyle;
     paragraphStyle = mutableParagraphStyle;
 }
 
++ (CGFloat) heightForMediaItem:(BLCMedia *)mediaItem width:(CGFloat)width {
+    // Make a cell
+    BLCMediaTableViewCell *layoutCell = [[BLCMediaTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"layoutCell"];
+    layoutCell.mediaItem = mediaItem;
+    layoutCell.frame = CGRectMake(0, 0, width, CGRectGetHeight(layoutCell.frame));
+    
+    [layoutCell setNeedsLayout];
+    [layoutCell layoutIfNeeded];
+    
+    // Get the actual height required for the cell
+    return CGRectGetMaxY(layoutCell.commentLabel.frame);
+}
+
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
@@ -104,6 +117,45 @@ static NSParagraphStyle *paragraphStyle;
     return self;
 }
 
+
+- (void)awakeFromNib
+{
+    // Initialization code
+}
+
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
+    [super setSelected:selected animated:animated];
+    
+    // Configure the view for the selected state
+}
+
+
+- (void) layoutSubviews {
+    [super layoutSubviews];
+    
+    // Before layout, calculate the intrinsic size of the labels (the size they "want" to be), and add 20 to the height for some vertical padding.
+    CGSize maxSize = CGSizeMake(CGRectGetWidth(self.bounds), CGFLOAT_MAX);
+    CGSize usernameLabelSize = [self.usernameAndCaptionLabel sizeThatFits:maxSize];
+    CGSize commentLabelSize = [self.commentLabel sizeThatFits:maxSize];
+    
+    self.usernameAndCaptionLabelHeightConstraint.constant = usernameLabelSize.height + 20;
+    self.commentLabelHeightConstraint.constant = commentLabelSize.height + 20;
+    // Hide the line between cells
+    self.separatorInset = UIEdgeInsetsMake(0, 0, 0, CGRectGetWidth(self.bounds));
+}
+
+- (void) setMediaItem:(BLCMedia *)mediaItem {
+    _mediaItem = mediaItem;
+    self.mediaImageView.image = _mediaItem.image;
+    self.usernameAndCaptionLabel.attributedText = [self usernameAndCaptionString];
+    self.commentLabel.attributedText = [self commentString];
+    
+    // self.imageHeightConstraint.constant = self.mediaItem.image.size.height / self.mediaItem.image.size.width * CGRectGetWidth(self.contentView.bounds);
+}
+
+#pragma mark - Attributed Strings
+
 - (NSAttributedString *) usernameAndCaptionString {
     CGFloat usernameFontSize = 15;
     
@@ -141,52 +193,6 @@ static NSParagraphStyle *paragraphStyle;
     return commentString;
 }
 
-- (void) layoutSubviews {
-    [super layoutSubviews];
-    
-    // Before layout, calculate the intrinsic size of the labels (the size they "want" to be), and add 20 to the height for some vertical padding.
-    CGSize maxSize = CGSizeMake(CGRectGetWidth(self.bounds), CGFLOAT_MAX);
-    CGSize usernameLabelSize = [self.usernameAndCaptionLabel sizeThatFits:maxSize];
-    CGSize commentLabelSize = [self.commentLabel sizeThatFits:maxSize];
-    
-    self.usernameAndCaptionLabelHeightConstraint.constant = usernameLabelSize.height + 20;
-    self.commentLabelHeightConstraint.constant = commentLabelSize.height + 20;
-    // Hide the line between cells
-    self.separatorInset = UIEdgeInsetsMake(0, 0, 0, CGRectGetWidth(self.bounds));
-}
 
-- (void) setMediaItem:(BLCMedia *)mediaItem {
-    _mediaItem = mediaItem;
-    self.mediaImageView.image = _mediaItem.image;
-    self.usernameAndCaptionLabel.attributedText = [self usernameAndCaptionString];
-    self.commentLabel.attributedText = [self commentString];
-    
-    self.imageHeightConstraint.constant = self.mediaItem.image.size.height / self.mediaItem.image.size.width * CGRectGetWidth(self.contentView.bounds);
-}
-
-+ (CGFloat) heightForMediaItem:(BLCMedia *)mediaItem width:(CGFloat)width {
-    // Make a cell
-    BLCMediaTableViewCell *layoutCell = [[BLCMediaTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"layoutCell"];
-    layoutCell.mediaItem = mediaItem;
-    layoutCell.frame = CGRectMake(0, 0, width, CGRectGetHeight(layoutCell.frame));
-    
-    [layoutCell setNeedsLayout];
-    [layoutCell layoutIfNeeded];
-    
-    // Get the actual height required for the cell
-    return CGRectGetMaxY(layoutCell.commentLabel.frame);
-}
-
-- (void)awakeFromNib
-{
-    // Initialization code
-}
-
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated
-{
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
 
 @end

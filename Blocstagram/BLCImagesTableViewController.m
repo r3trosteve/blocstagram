@@ -37,6 +37,9 @@
     
     [[BLCDataSource sharedInstance] addObserver:self forKeyPath:@"mediaItems" options:0 context:nil];
     
+    self.refreshControl = [[UIRefreshControl alloc] init];
+    [self.refreshControl addTarget:self action:@selector(refreshControlDidFire:) forControlEvents:UIControlEventValueChanged];
+    
     [self.tableView registerClass:[BLCMediaTableViewCell class] forCellReuseIdentifier:@"mediaCell"];
 }
 
@@ -135,6 +138,26 @@
     }
 }
 
+- (void) refreshControlDidFire:(UIRefreshControl *) sender {
+    [[BLCDataSource sharedInstance] requestNewItemsWithCompletionHandler:^(NSError *error) {
+        [sender endRefreshing];
+    }];
+}
+
+- (void) infiniteScrollIfNecessary {
+    NSIndexPath *bottomIndexPath = [[self.tableView indexPathsForVisibleRows] lastObject];
+    
+    if (bottomIndexPath && bottomIndexPath.row == [BLCDataSource sharedInstance].mediaItems.count - 1) {
+        // The very last cell is on screen
+        [[BLCDataSource sharedInstance] requestOldItemsWithCompletionHandler:nil];
+    }
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    [self infiniteScrollIfNecessary];
+}
 
 
 /*
