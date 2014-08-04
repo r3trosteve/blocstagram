@@ -105,7 +105,16 @@
         self.isRefreshing = YES;
         
         NSString *minID = [[self.mediaItems firstObject] idNumber];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+//        [defaults setValue:minID forKey:@"minID"];
+//        [defaults synchronize];
+        NSLog(@"MinID is:%@", minID);
+        if (!minID) {
+            minID = [defaults valueForKey:@"minID"];
+        }
+        NSLog(@"MinID after handling is:%@", minID);
         NSDictionary *parameters = @{@"min_id": minID};
+        
         
         [self populateDataWithParameters:parameters completionHandler:^(NSError *error) {
             self.isRefreshing = NO;
@@ -166,6 +175,7 @@
                         dispatch_async(dispatch_get_main_queue(), ^{
                             // done networking, go back on the main thread
                             [self parseDataFromFeedDictionary:feedDictionary fromRequestWithParameters:parameters];
+                            [self cacheTheMinID];
                             if (completionHandler) {
                                 completionHandler(nil);
                             }
@@ -248,6 +258,15 @@
             }
         });
     }
+}
+
+- (NSString *) cacheTheMinID {
+    NSString *minID = [[self.mediaItems firstObject] idNumber];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    [defaults setValue:minID forKey:@"minID"];
+    [defaults synchronize];
+    NSLog(@"cached minID is: %@", minID);
+    return minID;
 }
 
 @end
