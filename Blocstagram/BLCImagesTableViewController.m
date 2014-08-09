@@ -48,6 +48,7 @@
     [[BLCDataSource sharedInstance] removeObserver:self forKeyPath:@"mediaItems"];
 }
 
+
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (object == [BLCDataSource sharedInstance] && [keyPath isEqualToString:@"mediaItems"]) {
         // We know mediaItems changed.  Let's see what kind of change it is.

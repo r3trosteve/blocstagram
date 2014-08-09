@@ -27,13 +27,26 @@
     [BLCDataSource sharedInstance]; // create the data source (so it can receive the access token notification)
     
     UINavigationController *navVC = [[UINavigationController alloc] init];
-    BLCLoginViewController *loginVC = [[BLCLoginViewController alloc] init];
-    [navVC setViewControllers:@[loginVC] animated:YES];
     
-    [[NSNotificationCenter defaultCenter] addObserverForName:BLCLoginViewControllerDidGetAccessTokenNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+    if (![BLCDataSource sharedInstance].accessToken) {
+        BLCLoginViewController *loginVC = [[BLCLoginViewController alloc] init];
+        [navVC setViewControllers:@[loginVC] animated:YES];
+    
+        [[NSNotificationCenter defaultCenter] addObserverForName:BLCLoginViewControllerDidGetAccessTokenNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
         BLCImagesTableViewController *imagesVC = [[BLCImagesTableViewController alloc] init];
         [navVC setViewControllers:@[imagesVC] animated:YES];
-    }];
+        }];
+    } else {
+        BLCImagesTableViewController *imagesVC = [[BLCImagesTableViewController alloc] init];
+        [navVC setViewControllers:@[imagesVC] animated:YES];
+    }
+    
+    if ([BLCDataSource sharedInstance].mediaItems.count > 0) {
+        BLCDataSource *dataSource = [[BLCDataSource alloc] init];
+        [dataSource requestNewItemsWithCompletionHandler:^(NSError *error) {
+            NSLog(@"Completed");
+        }];
+    }
     
     self.window.rootViewController = navVC;
     
