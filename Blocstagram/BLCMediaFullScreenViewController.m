@@ -7,7 +7,7 @@
 //
 
 #import "BLCMediaFullScreenViewController.h"
-
+#import "BLCMediaTableViewCell.h"
 #import "BLCMedia.h"
 
 @interface BLCMediaFullScreenViewController () <UIScrollViewDelegate>
@@ -15,7 +15,7 @@
 @property (nonatomic, strong) BLCMedia *media;
 @property (nonatomic, strong) UITapGestureRecognizer *tap;
 @property (nonatomic, strong) UITapGestureRecognizer *doubleTap;
-@property (nonatomic, strong) UIBarButtonItem *shareButton;
+@property (nonatomic, strong) UIButton *shareButton;
 
 @end
 
@@ -34,15 +34,19 @@
 - (void) viewDidLoad {
     [super viewDidLoad];
     
-    UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithTitle:@"Share" style:UIBarButtonItemStyleDone target:self action:@selector(doubleTapFired:)];
     
-    self.navigationItem.rightBarButtonItem = shareButton;
     
     self.scrollView = [UIScrollView new];
     self.scrollView.delegate = self;
     self.scrollView.backgroundColor = [UIColor whiteColor];
     
     [self.view addSubview:self.scrollView];
+    
+    self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.view.bounds) - 20, 80, 44)];
+    self.shareButton.titleLabel.text = @"Share";
+    self.shareButton.titleLabel.textColor = [UIColor whiteColor];
+    [self.shareButton addTarget:self action:@selector(cell:didLongPressImageView:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.shareButton];
     
     self.imageView = [UIImageView new];
     self.imageView.image = self.media.image;
@@ -59,6 +63,8 @@
     
     [self.scrollView addGestureRecognizer:self.tap];
     [self.scrollView addGestureRecognizer:self.doubleTap];
+    
+    NSLog(@"Full screen View loaded");
 }
 
 - (void) viewWillLayoutSubviews {
