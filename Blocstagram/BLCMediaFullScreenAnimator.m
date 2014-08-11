@@ -12,7 +12,7 @@
 @implementation BLCMediaFullScreenAnimator
 
 - (NSTimeInterval)transitionDuration:(id <UIViewControllerContextTransitioning>)transitionContext {
-    return 0.2;
+    return 0.5;
 }
 
 - (void)animateTransition:(id <UIViewControllerContextTransitioning>)transitionContext {
@@ -40,6 +40,7 @@
             [fullScreenVC centerScrollView];
         } completion:^(BOOL finished) {
             [transitionContext completeTransition:YES];
+            NSLog(@"Completed transition");
         }];
     }
     else {
@@ -66,7 +67,9 @@
             
             toViewController.view.tintAdjustmentMode = UIViewTintAdjustmentModeAutomatic;
         } completion:^(BOOL finished) {
+            [[[UIApplication sharedApplication] keyWindow] addSubview:toViewController.view];
             [transitionContext completeTransition:YES];
+            NSLog(@"completed transition to normal");
         }];
     }
 }

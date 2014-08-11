@@ -28,23 +28,21 @@
     
     UINavigationController *navVC = [[UINavigationController alloc] init];
     
-    if (![BLCDataSource sharedInstance].accessToken) {
-        BLCLoginViewController *loginVC = [[BLCLoginViewController alloc] init];
-        [navVC setViewControllers:@[loginVC] animated:YES];
-    
-        [[NSNotificationCenter defaultCenter] addObserverForName:BLCLoginViewControllerDidGetAccessTokenNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+    if ([BLCDataSource sharedInstance].accessToken) {
         BLCImagesTableViewController *imagesVC = [[BLCImagesTableViewController alloc] init];
         [navVC setViewControllers:@[imagesVC] animated:YES];
-        }];
-    } else {
-        BLCImagesTableViewController *imagesVC = [[BLCImagesTableViewController alloc] init];
-        [navVC setViewControllers:@[imagesVC] animated:YES];
-    }
-    
-    if ([BLCDataSource sharedInstance].mediaItems.count > 0) {
-        BLCDataSource *dataSource = [[BLCDataSource alloc] init];
+        
+        BLCDataSource *dataSource = [BLCDataSource sharedInstance];
         [dataSource requestNewItemsWithCompletionHandler:^(NSError *error) {
             NSLog(@"Completed");
+        }];
+    } else {
+        BLCLoginViewController *loginVC = [[BLCLoginViewController alloc] init];
+        [navVC setViewControllers:@[loginVC] animated:YES];
+        
+        [[NSNotificationCenter defaultCenter] addObserverForName:BLCLoginViewControllerDidGetAccessTokenNotification object:nil queue:nil usingBlock:^(NSNotification *note) {
+            BLCImagesTableViewController *imagesVC = [[BLCImagesTableViewController alloc] init];
+            [navVC setViewControllers:@[imagesVC] animated:YES];
         }];
     }
     

@@ -14,6 +14,7 @@
 #import "BLCMediaTableViewCell.h"
 #import "BLCMediaFullScreenViewController.h"
 #import "BLCMediaFullScreenAnimator.h"
+#import "ShareHelper.h"
 
 @interface BLCImagesTableViewController () <BLCMediaTableViewCellDelegate, UIViewControllerTransitioningDelegate>
 
@@ -93,11 +94,7 @@
     }
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+
 - (NSMutableArray *) items {
     return [BLCDataSource sharedInstance].mediaItems;
 }
@@ -189,20 +186,7 @@
 }
 
 - (void) cell:(BLCMediaTableViewCell *)cell didLongPressImageView:(UIImageView *)imageView {
-    NSMutableArray *itemsToShare = [NSMutableArray array];
-    
-    if (cell.mediaItem.caption.length > 0) {
-        [itemsToShare addObject:cell.mediaItem.caption];
-    }
-    
-    if (cell.mediaItem.image) {
-        [itemsToShare addObject:cell.mediaItem.image];
-    }
-    
-    if (itemsToShare.count > 0) {
-        UIActivityViewController *activityVC = [[UIActivityViewController alloc] initWithActivityItems:itemsToShare applicationActivities:nil];
-        [self presentViewController:activityVC animated:YES completion:nil];
-    }
+    [ShareHelper shareMediaItem:cell.mediaItem fromViewController:self];
 }
 
 

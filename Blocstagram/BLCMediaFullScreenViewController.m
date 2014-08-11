@@ -9,6 +9,7 @@
 #import "BLCMediaFullScreenViewController.h"
 #import "BLCMediaTableViewCell.h"
 #import "BLCMedia.h"
+#import "ShareHelper.h"
 
 @interface BLCMediaFullScreenViewController () <UIScrollViewDelegate>
 
@@ -42,13 +43,15 @@
     
     [self.view addSubview:self.scrollView];
     
-    self.shareButton = [[UIButton alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.view.bounds) - 20, 80, 44)];
-    self.shareButton.titleLabel.text = @"Share";
-    self.shareButton.titleLabel.textColor = [UIColor whiteColor];
-    [self.shareButton addTarget:self action:@selector(cell:didLongPressImageView:) forControlEvents:UIControlEventTouchUpInside];
+    self.shareButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+    [self.shareButton setTitle:@"Share" forState:UIControlStateNormal];
+    self.shareButton.backgroundColor = [UIColor whiteColor];
+    //self.shareButton.titleLabel.textColor = [UIColor whiteColor];
+    [self.shareButton addTarget:self action:@selector(didPressShare:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.shareButton];
+    //[self.view bringSubviewToFront:self.shareButton];
     
-    self.imageView = [UIImageView new];
+    self.imageView = [[UIImageView alloc] init];
     self.imageView.image = self.media.image;
     
     [self.scrollView addSubview:self.imageView];
@@ -80,6 +83,8 @@
     
     self.scrollView.minimumZoomScale = minScale;
     self.scrollView.maximumZoomScale = 1;
+    
+    self.shareButton.frame = CGRectMake(0, CGRectGetMaxX(self.view.bounds) - 20, 80, 44);
 }
 
 - (void)centerScrollView {
@@ -140,6 +145,11 @@
     } else {
         [self.scrollView setZoomScale:self.scrollView.minimumZoomScale animated:YES];
     }
+}
+
+- (void)didPressShare:(UIButton *)sender
+{
+    [ShareHelper shareMediaItem:self.media fromViewController:self];
 }
 
 @end
