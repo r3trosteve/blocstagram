@@ -189,6 +189,15 @@
     [ShareHelper shareMediaItem:cell.mediaItem fromViewController:self];
 }
 
+- (void) cell:(BLCMediaTableViewCell *)cell didDoubleTapImageView:(UIImageView *)imageView {
+    self.lastTappedImageView = imageView;
+    BLCMedia *mediaItem = cell.mediaItem;
+    
+    [[BLCDataSource sharedInstance] downloadImageForMediaItem:mediaItem];
+    
+    NSLog(@"double tapped");
+}
+
 
 #pragma mark - UIViewControllerTransitioningDelegate
 
