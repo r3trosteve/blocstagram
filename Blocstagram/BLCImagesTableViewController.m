@@ -117,6 +117,13 @@
     return cell;
 }
 
+- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    BLCMedia *mediaItem = [BLCDataSource sharedInstance].mediaItems[indexPath.row];
+    if (mediaItem.downloadState == BLCMediaDownloadStateNeedsImage) {
+        [[BLCDataSource sharedInstance] downloadImageForMediaItem:mediaItem];
+    }
+}
+
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     BLCMedia *item = self.items[indexPath.row];
@@ -155,7 +162,24 @@
     }
 }
 
+- (void) reloadImagesIfNecessary {
+    NSLog(@"It is necessary");
+//    NSArray *visible = [self.tableView indexPathsForVisibleRows];
+//    NSIndexPath *indexPath = (NSIndexPath *)visible;
+//    BLCMedia *mediaItem = [BLCDataSource sharedInstance].mediaItems[indexPath.row];
+//    BLCMedia *mediaItem = [BLCDataSource sharedInstance].mediaItems[0];
+//    if (mediaItem.downloadState == BLCMediaDownloadStateNeedsImage) {
+//        [[BLCDataSource sharedInstance] downloadImageForMediaItem:mediaItem];
+//    }
+
+}
+
 #pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView {
+    NSLog(@"started decelerating");
+    [self reloadImagesIfNecessary];
+}
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     [self infiniteScrollIfNecessary];
