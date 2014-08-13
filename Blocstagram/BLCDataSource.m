@@ -148,17 +148,14 @@ static NSString * const kAccessTokenKeychainKey = @"accessToken";
     if (self.isRefreshing == NO) {
         self.isRefreshing = YES;
         
-        NSString *minID = [[self.mediaItems firstObject] idNumber];
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-//        [defaults setValue:minID forKey:@"minID"];
-//        [defaults synchronize];
+        NSString *minID = [[self.mediaItems firstObject] idNumber] ?: [defaults valueForKey:@"minID"];
         NSLog(@"MinID is:%@", minID);
-        if (!minID) {
-            minID = [defaults valueForKey:@"minID"];
-        }
-        NSLog(@"MinID after handling is:%@", minID);
-        NSDictionary *parameters = @{@"min_id": minID};
         
+        NSDictionary *parameters = nil;
+        if (minID) {
+            parameters = @{@"min_id": minID};
+        }
         
         [self populateDataWithParameters:parameters completionHandler:^(NSError *error) {
             self.isRefreshing = NO;
@@ -281,7 +278,9 @@ static NSString * const kAccessTokenKeychainKey = @"accessToken";
                                             mediaItem.downloadState = BLCMediaDownloadStateHasImage;
                                             NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
                                             NSUInteger index = [mutableArrayWithKVO indexOfObject:mediaItem];
-                                            [mutableArrayWithKVO replaceObjectAtIndex:index withObject:mediaItem];
+                                            if (index != NSNotFound) {
+                                                [mutableArrayWithKVO replaceObjectAtIndex:index withObject:mediaItem];
+                                            }
                                         } else {
                                             mediaItem.downloadState = BLCMediaDownloadStateNonRecoverableError;
                                         } 
