@@ -231,8 +231,9 @@ static NSString * const kAccessTokenKeychainKey = @"accessToken";
         
         NSRange rangeOfIndexes = NSMakeRange(0, tmpMediaItems.count);
         NSIndexSet *indexSetOfNewObjects = [NSIndexSet indexSetWithIndexesInRange:rangeOfIndexes];
-        
-        [mutableArrayWithKVO insertObjects:tmpMediaItems atIndexes:indexSetOfNewObjects];
+        if (tmpMediaItems.count) {
+            [mutableArrayWithKVO insertObjects:tmpMediaItems atIndexes:indexSetOfNewObjects];
+        }
     } else if (parameters[@"max_id"]) {
         // This was an infinite scroll request
         

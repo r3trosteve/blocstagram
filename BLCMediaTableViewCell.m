@@ -242,7 +242,7 @@ static NSParagraphStyle *paragraphStyle;
 }
 
 - (void) doubleTapFired:(UITapGestureRecognizer *)sender {
-    if (sender.state == UIGestureRecognizerStateBegan) {
+    if (sender.state == UIGestureRecognizerStateEnded) {
         [self.delegate cell:self didDoubleTapImageView:self.mediaImageView];
         NSLog(@"double tap fired");
     }
