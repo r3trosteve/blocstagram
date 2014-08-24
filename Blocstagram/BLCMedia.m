@@ -51,8 +51,8 @@
         
         self.likeState = userHasLiked ? BLCLikeStateLiked : BLCLikeStateNotLiked;
         
-        self.likeCount = mediaDictionary[@"likes"][@"count"];
-        NSLog(@"%@", self.likeCount);
+        self.likeCount = [mediaDictionary[@"likes"][@"count"] unsignedIntegerValue];
+        NSLog(@"%lu", (unsigned long)self.likeCount);
 
     }
     
@@ -80,7 +80,7 @@
         
         self.caption = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(caption))];
         self.comments = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(comments))];
-        self.likeCount = [aDecoder decodeObjectForKey:NSStringFromSelector(@selector(likeCount))];
+        self.likeCount = [aDecoder decodeIntegerForKey:NSStringFromSelector(@selector(likeCount))];
         self.likeState = [aDecoder decodeIntegerForKey:NSStringFromSelector(@selector(likeState))];
     }
     
@@ -94,7 +94,7 @@
     [aCoder encodeObject:self.image forKey:NSStringFromSelector(@selector(image))];
     [aCoder encodeObject:self.caption forKey:NSStringFromSelector(@selector(caption))];
     [aCoder encodeObject:self.comments forKey:NSStringFromSelector(@selector(comments))];
-    [aCoder encodeObject:self.likeCount forKey:NSStringFromSelector(@selector(likeCount))];
+    [aCoder encodeInteger:self.likeCount forKey:NSStringFromSelector(@selector(likeCount))];
     [aCoder encodeInteger:self.likeState forKey:NSStringFromSelector(@selector(likeState))];
 }
 

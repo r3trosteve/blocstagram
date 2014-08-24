@@ -96,6 +96,7 @@ static NSParagraphStyle *paragraphStyle;
         [self.mediaImageView addGestureRecognizer:self.longPressGestureRecognizer];
         
         self.usernameAndCaptionLabel = [[UILabel alloc] init];
+        self.usernameAndCaptionLabel.numberOfLines = 0;
         self.commentLabel = [[UILabel alloc] init];
         self.commentLabel.numberOfLines = 0;
         
@@ -116,7 +117,7 @@ static NSParagraphStyle *paragraphStyle;
         NSDictionary *viewDictionary = NSDictionaryOfVariableBindings(_mediaImageView, _usernameAndCaptionLabel, _commentLabel, _likeCounter, _likeButton);
         
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_mediaImageView]|" options:kNilOptions metrics:nil views:viewDictionary]];
-        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_usernameAndCaptionLabel][_likeCounter][_likeButton(==38)]|" options:NSLayoutFormatAlignAllTop | NSLayoutFormatAlignAllBottom metrics:nil views:viewDictionary]];
+        [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_usernameAndCaptionLabel]-20-[_likeCounter][_likeButton(==38)]|" options:NSLayoutFormatAlignAllTop | NSLayoutFormatAlignAllBottom metrics:nil views:viewDictionary]];
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_commentLabel]|" options:kNilOptions metrics:nil views:viewDictionary]];
         
         [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_mediaImageView][_usernameAndCaptionLabel][_commentLabel]"
@@ -170,12 +171,16 @@ static NSParagraphStyle *paragraphStyle;
     [super layoutSubviews];
     
     // Before layout, calculate the intrinsic size of the labels (the size they "want" to be), and add 20 to the height for some vertical padding.
-    CGSize maxSize = CGSizeMake(CGRectGetWidth(self.bounds), CGFLOAT_MAX);
-    CGSize usernameLabelSize = [self.usernameAndCaptionLabel sizeThatFits:maxSize];
-    CGSize commentLabelSize = [self.commentLabel sizeThatFits:maxSize];
+    CGSize maxSize = CGSizeMake(CGRectGetWidth(self.usernameAndCaptionLabel.bounds), CGFLOAT_MAX);
+    CGRect usernameLabelRect = {.origin = CGPointZero, .size = [self.usernameAndCaptionLabel.text sizeWithFont:self.usernameAndCaptionLabel.font
+                                                                                             constrainedToSize:maxSize]};
     
-    self.usernameAndCaptionLabelHeightConstraint.constant = usernameLabelSize.height + 20;
-    self.commentLabelHeightConstraint.constant = commentLabelSize.height + 20;
+    maxSize.width = self.contentView.bounds.size.width;
+    CGRect commentLabelRect = {.origin = CGPointZero, .size = [self.commentLabel.text sizeWithFont:self.commentLabel.font
+                                                                                 constrainedToSize:maxSize]};
+    
+    self.usernameAndCaptionLabelHeightConstraint.constant = usernameLabelRect.size.height + 20;
+    self.commentLabelHeightConstraint.constant = commentLabelRect.size.height + 20;
     // Hide the line between cells
     self.separatorInset = UIEdgeInsetsMake(0, 0, 0, CGRectGetWidth(self.bounds));
     
@@ -191,7 +196,7 @@ static NSParagraphStyle *paragraphStyle;
     self.mediaImageView.image = _mediaItem.image;
     self.usernameAndCaptionLabel.attributedText = [self usernameAndCaptionString];
     self.commentLabel.attributedText = [self commentString];
-    self.likeCounter.text = [NSString stringWithFormat:@"%li", (long)[mediaItem.likeCount integerValue]];
+    self.likeCounter.text = [NSString stringWithFormat:@"%lu", (long unsigned)mediaItem.likeCount];
     self.likeButton.likeButtonState = mediaItem.likeState;
     
 }

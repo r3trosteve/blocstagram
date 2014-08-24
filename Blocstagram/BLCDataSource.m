@@ -345,9 +345,7 @@ static NSString * const kAccessTokenKeychainKey = @"accessToken";
         [self.instagramOperationManager POST:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             mediaItem.likeState = BLCLikeStateLiked;
             NSLog(@"item liked");
-            int likeCounter = [mediaItem.likeCount intValue];
-            likeCounter++;
-            mediaItem.likeCount = [NSString stringWithFormat:@"%d", likeCounter];
+            mediaItem.likeCount++;
             [self reloadMediaItem:mediaItem];
             [self saveMediaItemsToDisk];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -363,9 +361,7 @@ static NSString * const kAccessTokenKeychainKey = @"accessToken";
         [self.instagramOperationManager DELETE:urlString parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             mediaItem.likeState = BLCLikeStateNotLiked;
             NSLog(@"item not liked");
-            int likeCounter = [mediaItem.likeCount intValue];
-            likeCounter--;
-            mediaItem.likeCount = [NSString stringWithFormat:@"%d", likeCounter];
+            mediaItem.likeCount--;
             [self reloadMediaItem:mediaItem];
             [self saveMediaItemsToDisk];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
